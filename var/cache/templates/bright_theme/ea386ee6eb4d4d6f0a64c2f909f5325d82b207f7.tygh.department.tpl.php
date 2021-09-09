@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21, created on 2021-09-07 04:04:50
+<?php /* Smarty version Smarty-3.1.21, created on 2021-09-07 17:22:42
          compiled from "C:\OpenServer\domains\cscart\design\themes\responsive\templates\views\products\department.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:494090646136ad7518bb70-95874592%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'ea386ee6eb4d4d6f0a64c2f909f5325d82b207f7' => 
     array (
       0 => 'C:\\OpenServer\\domains\\cscart\\design\\themes\\responsive\\templates\\views\\products\\department.tpl',
-      1 => 1630976688,
+      1 => 1631024560,
       2 => 'tygh',
     ),
   ),
@@ -67,9 +67,7 @@ $_smarty_tpl->tpl_vars['staff_id']->_loop = true;
     <?php } ?> 
 </p>
 
-
-<!--product_features_<?php echo htmlspecialchars($_smarty_tpl->tpl_vars['block']->value['block_id'], ENT_QUOTES, 'UTF-8');?>
---></div>
+</div>
 <?php $_smarty_tpl->_capture_stack[0][] = array("mainbox_title", null, null); ob_start();
 echo htmlspecialchars($_smarty_tpl->tpl_vars['department_data']->value['department'], ENT_QUOTES, 'UTF-8');
 list($_capture_buffer, $_capture_assign, $_capture_append) = array_pop($_smarty_tpl->_capture_stack[0]);
@@ -126,9 +124,7 @@ $_smarty_tpl->tpl_vars['staff_id']->_loop = true;
     <?php } ?> 
 </p>
 
-
-<!--product_features_<?php echo htmlspecialchars($_smarty_tpl->tpl_vars['block']->value['block_id'], ENT_QUOTES, 'UTF-8');?>
---></div>
+</div>
 <?php $_smarty_tpl->_capture_stack[0][] = array("mainbox_title", null, null); ob_start();
 echo htmlspecialchars($_smarty_tpl->tpl_vars['department_data']->value['department'], ENT_QUOTES, 'UTF-8');
 list($_capture_buffer, $_capture_assign, $_capture_append) = array_pop($_smarty_tpl->_capture_stack[0]);

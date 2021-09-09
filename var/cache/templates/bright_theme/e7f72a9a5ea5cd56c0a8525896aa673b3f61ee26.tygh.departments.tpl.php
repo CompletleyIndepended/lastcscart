@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21, created on 2021-09-07 03:04:21
+<?php /* Smarty version Smarty-3.1.21, created on 2021-09-09 22:23:35
          compiled from "C:\OpenServer\domains\cscart\design\themes\responsive\templates\views\products\departments.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:11577126496136ab3f369da4-42568914%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'e7f72a9a5ea5cd56c0a8525896aa673b3f61ee26' => 
     array (
       0 => 'C:\\OpenServer\\domains\\cscart\\design\\themes\\responsive\\templates\\views\\products\\departments.tpl',
-      1 => 1630973056,
+      1 => 1631214711,
       2 => 'tygh',
     ),
   ),
@@ -96,9 +96,10 @@ $_smarty_tpl->tpl_vars["obj_id_prefix"] = new Smarty_variable(((string)$_smarty_
 
 <?php }?>
 
-<?php $_smarty_tpl->_capture_stack[0][] = array("mainbox_title", null, null); ob_start();
-echo htmlspecialchars($_smarty_tpl->tpl_vars['title']->value, ENT_QUOTES, 'UTF-8');
-list($_capture_buffer, $_capture_assign, $_capture_append) = array_pop($_smarty_tpl->_capture_stack[0]);
+<?php $_smarty_tpl->_capture_stack[0][] = array("mainbox_title", null, null); ob_start(); ?>
+    <?php echo htmlspecialchars($_smarty_tpl->tpl_vars['title']->value, ENT_QUOTES, 'UTF-8');?>
+
+<?php list($_capture_buffer, $_capture_assign, $_capture_append) = array_pop($_smarty_tpl->_capture_stack[0]);
 if (!empty($_capture_buffer)) {
  if (isset($_capture_assign)) $_smarty_tpl->assign($_capture_assign, ob_get_contents());
  if (isset( $_capture_append)) $_smarty_tpl->append( $_capture_append, ob_get_contents());
@@ -174,9 +175,10 @@ $_smarty_tpl->tpl_vars["obj_id_prefix"] = new Smarty_variable(((string)$_smarty_
 
 <?php }?>
 
-<?php $_smarty_tpl->_capture_stack[0][] = array("mainbox_title", null, null); ob_start();
-echo htmlspecialchars($_smarty_tpl->tpl_vars['title']->value, ENT_QUOTES, 'UTF-8');
-list($_capture_buffer, $_capture_assign, $_capture_append) = array_pop($_smarty_tpl->_capture_stack[0]);
+<?php $_smarty_tpl->_capture_stack[0][] = array("mainbox_title", null, null); ob_start(); ?>
+    <?php echo htmlspecialchars($_smarty_tpl->tpl_vars['title']->value, ENT_QUOTES, 'UTF-8');?>
+
+<?php list($_capture_buffer, $_capture_assign, $_capture_append) = array_pop($_smarty_tpl->_capture_stack[0]);
 if (!empty($_capture_buffer)) {
  if (isset($_capture_assign)) $_smarty_tpl->assign($_capture_assign, ob_get_contents());
  if (isset( $_capture_append)) $_smarty_tpl->append( $_capture_append, ob_get_contents());

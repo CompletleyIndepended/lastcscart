@@ -4063,14 +4063,12 @@ function fn_prepare_product_overridable_fields(array $product, $company_id = nul
  *
  * @return array<string, array{global_setting: string, default_setting: string}>
  */
-function fn_get_product_overridable_fields_schema()
-{
+function fn_get_product_overridable_fields_schema(){
     static $schema;
 
     if ($schema !== null) {
         return $schema;
     }
-
     return $schema = fn_get_schema('products', 'overridable_fields');
 }
 
@@ -4087,41 +4085,39 @@ function fn_get_collection_data($collection_id = 0, $lang_code = CART_LANGUAGE){
             $collection['product_ids'] = fn_collection_get_links($collection['collection_id']);
         }
     }
-    
     return $collection;
-
 }
 
 function fn_get_collections($params = [], $items_per_page = 0, $lang_code = CART_LANGUAGE){
     
     $default_params = array(
-    'page' => 1,
-    'items_per_page' => $items_per_page
+        'page' => 1,
+        'items_per_page' => $items_per_page
     );
 
     $params = array_merge($default_params, $params);
 
     if (AREA == 'C') {
-    $params['status'] = 'A';
+        $params['status'] = 'A';
     }
 
     $sortings = array(
-    'position' => '?:collections.position',
-    'timestamp' => '?:collections.timestamp',
-    'name' => '?:collection_descriptions.collection',
-    'status' => '?:collections.status',
+        'position' => '?:collections.position',
+        'timestamp' => '?:collections.timestamp',
+        'name' => '?:collection_descriptions.collection',
+        'status' => '?:collections.status',
     );
 
     $condition = $limit = $join = '';
 
     if (!empty($params['limit'])) {
-    $limit = db_quote(' LIMIT 0, ?i', $params['limit']);
+        $limit = db_quote(' LIMIT 0, ?i', $params['limit']);
     }
 
     $sorting = db_sort($params, $sortings, 'name', 'asc');
 
     if (!empty($params['item_ids'])) {
-    $condition .= db_quote(' AND ?:collections.collection_id IN (?n)', explode(',', $params['item_ids']));
+        $condition .= db_quote(' AND ?:collections.collection_id IN (?n)', explode(',', $params['item_ids']));
     }
 
     if (!empty($params['collection_id'])) {
@@ -4133,28 +4129,28 @@ function fn_get_collections($params = [], $items_per_page = 0, $lang_code = CART
     }
 
     if (!empty($params['status'])) {
-    $condition .= db_quote(' AND ?:collections.status = ?s', $params['status']);
+        $condition .= db_quote(' AND ?:collections.status = ?s', $params['status']);
     }
  
 
     $fields = array (
-    '?:collections.*',
-    '?:collection_descriptions.collection',
-    '?:collection_descriptions.description',
+        '?:collections.*',
+        '?:collection_descriptions.collection',
+        '?:collection_descriptions.description',
     );
 
     $join .= db_quote(' LEFT JOIN ?:collection_descriptions ON ?:collection_descriptions.collection_id = ?:collections.collection_id AND ?:collection_descriptions.lang_code = ?s', $lang_code);
 
     if (!empty($params['items_per_page'])) {
-    $params['total_items'] = db_get_field("SELECT COUNT(*) FROM ?:collections $join WHERE 1 $condition");
-    $limit = db_paginate($params['page'], $params['items_per_page'], $params['total_items']);
+        $params['total_items'] = db_get_field("SELECT COUNT(*) FROM ?:collections $join WHERE 1 $condition");
+        $limit = db_paginate($params['page'], $params['items_per_page'], $params['total_items']);
     }
 
     $collections = db_get_hash_array(
-    "SELECT ?p FROM ?:collections " .
-    $join .
-    "WHERE 1 ?p ?p ?p",
-    'collection_id', implode(', ', $fields), $condition, $sorting, $limit
+        "SELECT ?p FROM ?:collections " .
+        $join .
+        "WHERE 1 ?p ?p ?p",
+        'collection_id', implode(', ', $fields), $condition, $sorting, $limit
     );
 
     $collection_image_ids = array_keys($collections);
@@ -4167,41 +4163,33 @@ function fn_get_collections($params = [], $items_per_page = 0, $lang_code = CART
     return array($collections, $params);
 }
 
-function fn_update_collection($data, $collection_id, $lang_code = DESCR_SL)
-{
-
+function fn_update_collection($data, $collection_id, $lang_code = DESCR_SL){
     if (isset($data['timestamp'])) {
         $data['timestamp'] = fn_parse_date($data['timestamp']);
     }
     if (!empty($collection_id)) {
         db_query("UPDATE ?:collections SET ?u WHERE collection_id = ?i", $data, $collection_id);
         db_query("UPDATE ?:collection_descriptions SET ?u WHERE collection_id = ?i AND lang_code = ?s", $data, $collection_id, $lang_code);
-
-
     } else {
         $collection_id = $data['collection_id'] = db_replace_into('collections', $data);
         
         foreach (Languages::getAll() as $data['lang_code'] => $v) {
             db_query("REPLACE INTO ?:collection_descriptions ?e", $data);
         }
-
     }
+    
     if(!empty($collection_id)){
         fn_attach_image_pairs('collections', 'collection', $collection_id, $lang_code);
     }
    
-
     $product_ids = !empty($data['product_ids']) ? $data['product_ids'] : [];
     fn_collection_delete_links($collection_id);
     fn_collection_add_links($collection_id, $product_ids);
 
-
     return $collection_id;
 }
 
-function fn_delete_collection($collection_id)
-{
-
+function fn_delete_collection($collection_id){
     if (!empty($collection_id)) {
 
         $res = db_query("DELETE FROM ?:collections WHERE collection_id = ?i", $collection_id);
@@ -4230,8 +4218,8 @@ function fn_collection_get_links($collection_id){
     return !empty($collection_id) ?  db_get_fields('SELECT product_id FROM  `?:collections_links` WHERE `collection_id` = ?i', $collection_id) : [];
 }
 
-function fn_get_department_data($department_id = 0, $lang_code = CART_LANGUAGE)
-{
+function fn_get_department_data($department_id = 0, $lang_code = CART_LANGUAGE){
+
     $department = [];
     if(!empty($department_id)){
         list($departments) = fn_get_departments([
@@ -4242,15 +4230,11 @@ function fn_get_department_data($department_id = 0, $lang_code = CART_LANGUAGE)
             $department = reset($departments);
             $department['employeers_ids'] = fn_department_get_links($department['department_id']);
         }
-        
     }
-   // fn_print_die($department['employeers_ids']);
-    
     return $department;
 }
 
 function fn_get_departments($params = [], $items_per_page = 0, $lang_code = CART_LANGUAGE){
-
     $default_params = array(
         'page' => 1,
         'items_per_page' => $items_per_page
@@ -4320,15 +4304,14 @@ function fn_get_departments($params = [], $items_per_page = 0, $lang_code = CART
     foreach ($departments as $department_id => $department) {
        $departments[$department_id]['main_pair'] = !empty($images[$department_id]) ? reset($images[$department_id]) : array();
     };
+
     return array($departments, $params);
 }
 
-function fn_update_department($data, $department_id, $lang_code = DESCR_SL)
-{
+function fn_update_department($data, $department_id, $lang_code = DESCR_SL){
     if (isset($data['timestamp'])) {
         $data['timestamp'] = fn_parse_date($data['timestamp']);
     }
-   //fn_print_die($data);
     
     if (!empty($department_id)) {
         db_query("UPDATE ?:departments SET ?u WHERE department_id = ?i", $data, $department_id);
@@ -4384,5 +4367,5 @@ function fn_department_add_links($department_id, $employeers_ids){
 
 function fn_department_get_links($department_id){
     return !empty($department_id) ? db_get_fields('SELECT employeers_id FROM `?:departments_links` WHERE `department_id` = ?i', $department_id) : [];
-
 }
+

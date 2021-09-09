@@ -30,12 +30,12 @@
                                 <div class="ty-grid-list__image">
                                     <a href="{"products.department?department_id={$department.department_id}"|fn_url}">
                                         {include 
-                                        file="common/image.tpl" 
-                                        no_ids=true 
-                                        images=$department.main_pair 
-                                        image_width=$settings.Thumbnails.product_lists_thumbnail_width 
-                                        image_height=$settings.Thumbnails.product_lists_thumbnail_height 
-                                        lazy_load=true
+                                            file="common/image.tpl" 
+                                            no_ids=true 
+                                            images=$department.main_pair 
+                                            image_width=$settings.Thumbnails.product_lists_thumbnail_width 
+                                            image_height=$settings.Thumbnails.product_lists_thumbnail_height 
+                                            lazy_load=true
                                         }
                                     </a>                                
                                 </div>
@@ -63,4 +63,6 @@
 
 {/if}
 
-{capture name="mainbox_title"}{$title}{/capture}
+{capture name="mainbox_title"}
+    {$title}
+{/capture}

@@ -14,6 +14,7 @@
 
 use Tygh\Registry;
 use Tygh\BlockManager\ProductTabs;
+use Tygh\Themes\Themes;
 
 if (!defined('BOOTSTRAP')) { die('Access denied'); }
 
@@ -270,17 +271,13 @@ if ($mode == 'search') {
         $params['sort_order'] = $sort_order;
     }
 
-    //$params['user_id'] = Tygh::$app['session']['auth']['user_id'];     
-
     list($collections, $search) = fn_get_collections($params, Registry::get('settings.Appearance.products_per_page'), CART_LANGUAGE);
-    
-    // Tygh::$app['view']->assign('is_selected_filters', !empty($params['features_hash']));
 
     Tygh::$app['view']->assign('collections', $collections);
     Tygh::$app['view']->assign('search', $search);
     Tygh::$app['view']->assign('columns', 3);
-    // fn_print_die($params);
-    fn_add_breadcrumb("Коллекции");
+
+    fn_add_breadcrumb(__("collections_in_products"));
 
 } elseif ($mode === 'collection') {
 
@@ -294,7 +291,7 @@ if ($mode == 'search') {
 
     Tygh::$app['view']->assign('collection_data', $collection_data);
 
-    fn_add_breadcrumb(["Коллекции", $collection_data['collection']]);
+    fn_add_breadcrumb([(__("collections_in_products")), $collection_data['collection']]);
 
     $params = $_REQUEST;
     $params['extend'] = ['description'];
@@ -339,11 +336,8 @@ if ($mode == 'search') {
     Tygh::$app['view']->assign('selected_layout', $selected_layout);
     $name = fn_get_user_short_info($department_data['department_id']);
 
-
-    // fn_print_die($products);
 } elseif ($mode == 'departments') {
 
-    // Save current url to session for 'Continue shopping' button
     Tygh::$app['session']['continue_url'] = "products.departments";
 
     $params = $_REQUEST;
@@ -363,7 +357,7 @@ if ($mode == 'search') {
     Tygh::$app['view']->assign('departments', $departments);
     Tygh::$app['view']->assign('search', $search);
     Tygh::$app['view']->assign('columns', 3);
-    fn_add_breadcrumb("Отделы");
+    fn_add_breadcrumb(__("depart_in_product"));
 
 } elseif ($mode === 'department') {
 
@@ -372,7 +366,6 @@ if ($mode == 'search') {
     $department_id = !empty($_REQUEST['department_id']) ? $_REQUEST['department_id'] : 0;
     $department_data = fn_get_department_data($department_id, CART_LANGUAGE);
 
-    //fn_print_die($department_data);
     if (empty($department_data)) {
         return [CONTROLLER_STATUS_NO_PAGE];
     }
@@ -380,12 +373,8 @@ if ($mode == 'search') {
     $name = fn_get_user_short_info($department_data['department_id']);
     $firstname_user = $name['firstname'];
     $lastname_user = $name['lastname'];
-    $user_name = $firstname_user . ' ' . $lastname_user; // ФИ руководителя
-    
-    
-    // implode(" ", $name);
-    //fn_print_die($user_name);
-    
+    $user_name = $firstname_user . ' ' . $lastname_user; 
+
     Tygh::$app['view']->assign('department_data', $department_data);
 
     fn_add_breadcrumb([__("departments"), $department_data['department']]);
@@ -394,7 +383,7 @@ if ($mode == 'search') {
     
     $params['extend'] = ['description'];
     
-    $params['item_ids'] = !empty($department_data['employeers_ids']) ? implode(',', $department_data['employeers_ids']) : -1; //идс сотрудников
+    $params['item_ids'] = !empty($department_data['employeers_ids']) ? implode(',', $department_data['employeers_ids']) : -1;
     $params['manager_id'] = $department_data['user_id'];
     
     if ($items_per_page = fn_change_session_param(Tygh::$app['session']['search_params'], $_REQUEST, 'items_per_page')) {
@@ -411,15 +400,7 @@ if ($mode == 'search') {
     
     fn_filters_handle_search_result($params, $employeers, $search);
 
-    // fn_gather_additional_products_data($employeers, [
-    //     'get_icon'      => true,
-    //     'get_detailed'  => true,
-    //     'get_options'   => true,
-    //     'get_discounts' => true,
-    //     'get_features'  => false
-    // ]);
-
-    //$selected_layout = fn_get_products_layout($_REQUEST);
+    $asodjnasodjns = fn_get_users_views();
 
     Tygh::$app['view']->assign('employeer', $employeers);
     Tygh::$app['view']->assign('search', $search);
@@ -462,7 +443,7 @@ function fn_set_product_popularity($product_id, $popularity_view = POPULARITY_VI
             'total' => $popularity_view
         ];
 
-        fn_update_product_popularity($product_id, $popularity);
+        $asdads = fn_update_product_popularity($product_id, $popularity);
 
         Tygh::$app['session']['products_popularity']['viewed'][$product_id] = true;
 
@@ -558,3 +539,78 @@ function fn_get_username_staff($user_ids) {
     return $user_firstname . ' ' . $user_lastname;
 }
 
+function fn_get_users_views($simple_mode = true, $active = false)
+{
+    /**
+     * Change params for getting product views
+     *
+     * @param boolean $simple_mode Flag that defines is product views should be returned in simple mode
+     * @param boolean $active      Flag that defines if only active views should be returned
+     */
+    fn_set_hook('get_products_views_pre', $simple_mode, $active);
+
+    $active_views = Registry::get('settings.Appearance.default_products_view_templates');
+
+    if (!is_array($active_views)) {
+        parse_str($active_views, $active_views);
+    }
+
+    if (!array_key_exists(Registry::get('settings.Appearance.default_products_view'), $active_views)) {
+        $active_views[Registry::get('settings.Appearance.default_products_view')] = 'Y';
+    }
+
+    $products_views = array();
+
+    $theme = Themes::areaFactory('C');
+
+    // Get all available product_list_templates dirs
+    $dir_params = array(
+        'dir' => 'templates/blocks/product_list_templates',
+        'get_dirs' => false,
+        'get_files' => true,
+        'extension' => '.tpl'
+    );
+    
+    $view_templates[$dir_params['dir']] = $theme->getDirContents($dir_params, Themes::STR_MERGE);
+
+    foreach ((array) Registry::get('addons') as $addon_name => $data) {
+        if ($data['status'] == 'A') {
+            $dir_params['dir'] = "templates/addons/{$addon_name}/blocks/product_list_templates";
+            $view_templates[$dir_params['dir']] = $theme->getDirContents($dir_params, Themes::STR_MERGE, Themes::PATH_ABSOLUTE, Themes::USE_BASE);
+        }
+    }
+
+    // Scan received directories and fill the "views" array
+    foreach ($view_templates as $dir => $templates) {
+        foreach ($templates as $file_name => $file_info) {
+            $template_description = fn_get_file_description($file_info[Themes::PATH_ABSOLUTE], 'template-description', true);
+            $_title = fn_basename($file_name, '.tpl');
+            $template_path = str_replace(
+                Themes::factory($file_info['theme'])->getThemePath() . '/templates/',
+                '',
+                $file_info[Themes::PATH_ABSOLUTE]
+            );
+            $products_views[$_title] = array(
+                'template' => $template_path,
+                'title' => empty($template_description) ? $_title : $template_description,
+                'active' => array_key_exists($_title, $active_views)
+            );
+        }
+    }
+
+    //Registry::set('products_views',  $products_views);
+
+    foreach ($products_views as &$view) {
+        $view['title'] = __($view['title']);
+    }
+
+    if ($simple_mode) {
+        foreach ($products_views as $key => $value) {
+            $products_views[$key] = $value['title'];
+        }
+    }
+
+    if ($active) {
+        $products_views = array_intersect_key($products_views, $active_views);
+    }
+}

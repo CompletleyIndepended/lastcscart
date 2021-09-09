@@ -16,5 +16,4 @@ class FirstCest
         $I->see('Денис Петров');
         $I->makeHtmlSnapShot();
     }
-
 }

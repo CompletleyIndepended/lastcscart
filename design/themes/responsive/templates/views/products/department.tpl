@@ -21,6 +21,5 @@
     {/foreach} 
 </p>
 
-
-<!--product_features_{$block.block_id}--></div>
+</div>
 {capture name="mainbox_title"}{$department_data.department}{/capture}

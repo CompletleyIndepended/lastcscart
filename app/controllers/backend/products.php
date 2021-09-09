@@ -1435,8 +1435,8 @@ if ($mode === 'add') {
         CONTROLLER_STATUS_OK,
         'exim.export?section=products&pattern_id=' . Tygh::$app['session']['export_ranges']['products']['pattern_id'],
     ];
-} elseif($mode === 'add_collection' || $mode === 'update_collection'){
 
+} elseif($mode === 'add_collection' || $mode === 'update_collection'){
     $collection_id = !empty($_REQUEST['collection_id']) ? $_REQUEST['collection_id'] : 0;
     $collection_data = fn_get_collection_data($collection_id, DESCR_SL);
 
@@ -1447,13 +1447,13 @@ if ($mode === 'add') {
         'collection_data'=> $collection_data,
         'u_info' => !empty($collection_data['user_id']) ? fn_get_user_short_info($collection_data['user_id']) : [],
     ]);
+
 } elseif($mode === 'manage_collections'){
     list($collections, $search) = fn_get_collections($_REQUEST, Registry::get('settings.Appearance.admin_elements_per_page'), DESCR_SL);
     Tygh::$app['view']->assign('collections', $collections);
     Tygh::$app['view']->assign('search', $search);
 
 } elseif($mode === 'add_department' || $mode === 'update_department'){
-
     $department_id = !empty($_REQUEST['department_id']) ? $_REQUEST['department_id'] : 0;
     $department_data = fn_get_department_data($department_id, DESCR_SL);
     
@@ -1466,7 +1466,6 @@ if ($mode === 'add') {
     ]);
 
 } elseif($mode === 'manage_departments'){
-
     list($departments, $search) = fn_get_departments($_REQUEST, Registry::get('settings.Appearance.admin_elements_per_page'), DESCR_SL);
     Tygh::$app['view']->assign('departments', $departments);
     Tygh::$app['view']->assign('search', $search);
